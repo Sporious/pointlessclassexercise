@@ -5,12 +5,10 @@ function compResult()
   if (guess < 1/3) computerGuess = "Rock";
   if (guess < 2/3) computerGuess = "Scissors";
   if (guess <= 1 ) computerGuess = "Paper";
-  alert("computerGuess " + computerGuess)
 }
 
 function answer( input )
 {
-  alert("input = " + input)
   if ( input == "Rock" )
   {
     switch (computerGuess)
