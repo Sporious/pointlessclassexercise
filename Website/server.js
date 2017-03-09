@@ -1,25 +1,136 @@
-function checkResults() {
-    return storage.length > 1 ? ("rock" == storage[0][1] ? ("scissors" == storage[1][1] && (winner = storage[0][0], loser = storage[1][0]), "paper" == storage[1][1] && (winner = storage[1][0], loser = storage[0][0]), "rock" == storage[1][1] && (winner = null, loser = null)) : "scissors" == storage[0][1] ? ("paper" == storage[1][1] && (winner = storage[0][0], loser = storage[1][0]), "rock" == storage[1][1] && (winner = storage[1][0], loser = storage[0][0]), "scissors" == storage[1][1] && (winner = null, loser = null)) : "paper" == storage[0][1] && ("rock" == storage[1][1] && (winner = storage[0][0], loser = storage[1][0]), "scissors" == storage[1][1] && (winner = storage[1][0], loser = storage[0][0]), "paper" == storage[1][1] && (winner = null, loser = null)), null == winner ? (io.to(storage[0][0]).emit("output", "Draw"), io.to(storage[1][0]).emit("output", "Draw")) : (io.to(winner).emit("output", "You Won"), io.to(loser).emit("output", "You Lose (noob)")), !0) : void 0
-}
-var app = require("express")(),
-    http = require("http").Server(app),
-    io = require("socket.io")(http),
-    bodyParser = require("body-parser"),
-    winner, loser, currentUsers = 0;
-app.use(bodyParser.json()), app.use(bodyParser.urlencoded({
-    extended: !0
-})), app.post("/", function() {}), app.get("/", function(req, res) {
-    2 > currentUsers ? res.sendFile(__dirname + "/index.html") : res.send("Game is currently full :(, try later")
-}), storage = [], io.on("connection", function(socket) {
-    var gotResultYet = !1;
-    if (2 > currentUsers) {
-        currentUsers = Object.keys(io.sockets.sockets).length; {
-            io.engine.id
-        }
-        socket.on("disconnect", function() {
-            currentUsers--
-        }), socket.on("result", function(result) {
-            gotResultYet || (gotResultYet = !0, storage.push([socket.id, result]), checkResults() && (winner = "", loser = "", gotResultYet = !1, storage = []))
-        })
+var app = require('express')();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+var bodyParser = require('body-parser');
+var winner;
+var loser;
+var currentUsers = 0;
+//app.use(bodyParser.json());
+//app.use(bodyParser.urlencoded({ extended: true }));
+
+app.post('/', function (req, res) {
+    console.log(req.body);
+    //res.redirect('index.js')
+});
+
+app.get('/', function ( req, res ) {
+    if ( currentUsers < 2 )
+    {
+        res.sendFile(__dirname + '/index.html');
     }
-}), http.listen(3e3, function() {});
+    else
+    {
+        res.send("Game is currently full :(, try later");
+    }
+        console.log("Current users = " + currentUsers);
+});
+
+app.get('/rock', function (req, res) {
+    res.sendFile(__dirname + '/img/rock.gif');
+});
+app.get('/paper', function (req, res) {
+    res.sendFile(__dirname + '/img/paper.gif');
+});
+app.get('/scissors', function (req, res) {
+    res.sendFile(__dirname + '/img/scissors.gif');
+});
+app.get('/css', function (req, res) {
+    res.sendFile(__dirname + '/css/css.css');
+});
+app.get('/multiplayer.html', function (req, res) {
+    res.sendFile(__dirname + '/');
+});
+app.get('/history.html', function (req, res) {
+    res.sendFile(__dirname + '/history.html');
+});
+
+storage = []
+io.on( 'connection', function( socket ) {
+    var gotResultYet = false;
+    if ( currentUsers < 2 ) {
+    var effectiveId=currentUsers;
+    currentUsers = Object.keys(io.sockets.sockets).length;
+    console.log('User connected');
+    var id = io.engine.id;
+    console.log('effectiveId = ' + effectiveId);
+    console.log('id = ' + socket.id );
+    //console.log('usercount = ' + socket);
+    console.log(Object.keys(io.sockets.sockets).length);
+    //console.log(Object.keys(io.sockets.connected));
+
+    socket.on( 'disconnect', function() {
+        console.log( 'user disconnected, id: ' + id );
+        currentUsers--;
+
+    });
+    socket.on( 'result', function( result ) {
+        console.log(result)
+        if (!gotResultYet)
+        {
+            gotResultYet = true;
+            console.log(gotResultYet);
+            storage.push( [socket.id, result] );
+            if (checkResults())
+            {
+                winner = "";
+                loser = "";
+                gotResultYet = false;
+                storage = [];
+                console.log(storage.length);
+            }
+
+
+        }
+    });
+}});
+
+function checkResults()
+{
+    if (storage.length > 1)
+    {
+        console.log("Entry 1: " + storage[0][0] + " " + storage[0][1])
+        console.log("Entry 2: " + storage[1][0] + " " + storage[1][1])
+        if (storage[0][1] == "rock")
+        {
+            if (storage[1][1] == "scissors") winner = storage[0][0], loser = storage[1][0];
+            if (storage[1][1] == "paper") winner = storage[1][0], loser = storage[0][0];
+            if (storage[1][1] == "rock") winner = null, loser = null;
+            console.log("in rock");
+        }
+        else if (storage[0][1] == "scissors")
+        {
+            if (storage[1][1] == "paper") winner = storage[0][0], loser = storage[1][0];
+            if (storage[1][1] == "rock") winner = storage[1][0], loser = storage[0][0];
+            if (storage[1][1] == "scissors") winner = null, loser = null;
+        }
+        else if (storage[0][1] == "paper")
+        {
+            if (storage[1][1] == "rock") winner = storage[0][0], loser = storage[1][0];
+            if (storage[1][1] == "scissors") winner = storage[1][0], loser = storage[0][0];
+            if (storage[1][1] == "paper") winner = null, loser = null;
+        }
+        console.log(winner);
+        if( winner == null ){
+            io.to( storage[0][0] ).emit( 'output', 'Draw' );
+            io.to( storage[1][0] ).emit( 'output', 'Draw' );
+        }
+        else {
+        io.to( winner ).emit( 'output', 'You Won' );
+        io.to( loser ).emit( 'output', 'You Lose (noob)' );
+
+    }
+    return true;
+    }
+}
+
+
+
+function asd()
+{
+    console.log("asd");
+
+}
+
+http.listen(3000, function( req, res ) {
+    console.log( 'listening on *:3000' );
+});
