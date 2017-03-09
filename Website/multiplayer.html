@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="favicon.jpg" type="image/x-icon">
+<meta charset="utf-8">
+<title>Jordan Low</title>
+<link type="text/css" rel="stylesheet" href="stylesheet.css">
+</head>
+<body bgcolor="#ffffff">
+    <form name="cse" id="searchbox_demo" action="http://www.google.com/cse">
+  <input type="hidden" name="cref" value="" />
+  <input type="hidden" name="ie" value="utf-8" />
+  <input type="hidden" name="hl" value="" />
+  <input name="q" type="text" size="40" />
+  <input type="submit" name="sa" value="Search" />
+</form>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+			<li>
+				<a href="index.html">Pages</a>
+				<ul>
+					<li><a href="multiplayer.html">Multiplayer</a></li>
+					<li><a href="history.html">History</a></li>
+				</ul>
+			</li>
+        </li>
+    </ul>
+
+    <br><br><hr/>
+    <div id="dropdownFix">
+      <h1>Single Player</h1>
+      <button id="Multiplayer"><img src="2 player.gif" style="align:centre"></button>
+      <br>
+    	<button id="rock"><img src="rock.gif" style="align:center" alt="An image of a rock"></button>
+    	<button id="paper"><img src="paper.gif" alt="an image of paper"></button>
+    	<button id="scissors"><img src="scissors.gif" alt="an image of scissors"></button>
+    	<div id="outputDiv"></div>
+    </div>
+
+
+    	<script src="/socket.io/socket.io.js"></script>
+    	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+      <script>
+        if(choice == 'sp'){
+          $('#div#').html(spPage)
+        }
+        else if(choice == 'mp'){
+          $('#div#').html(mpPage)
+        }
+        var mp =
+      </script>
+    	<script>
+        var socket = io();
+        $('#rock').click(function() {
+            alert("rock");
+            socket.emit('result', "rock");
+            return false;
+
+        });
+        $('#paper').click(function() {
+            alert("paper");
+            socket.emit('result', "paper");
+            return false;
+
+        });
+        $('#scissors').click(function() {
+            alert("scissors");
+            socket.emit('result', "scissors");
+            return false;
+
+        });
+        socket.on('output', function(message) {
+            $('#outputDiv').html(message);
+        });
+
+    </script>
+
+</body>
+</html>
