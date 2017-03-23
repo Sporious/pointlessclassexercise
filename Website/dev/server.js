@@ -1,7 +1,7 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var bodyParser = require('body-parser');
+//var bodyParser = require('body-parser');
 var winner;
 var loser;
 var currentUsers = 0;
@@ -28,6 +28,24 @@ app.get('/', function ( req, res ) {
 app.get('/rock', function (req, res) {
     res.sendFile(__dirname + '/img/rock.gif');
 });
+app.get('/ok', function (req, res) {
+    res.sendFile(__dirname + '/img/ok.jpg');
+});
+app.get('/waiting', function (req, res) {
+    res.sendFile(__dirname + '/img/waiting.svg');
+});
+app.get('/left', function (req, res) {
+    res.sendFile(__dirname + '/img/left.gif');
+});
+app.get('/win', function (req, res) {
+    res.sendFile(__dirname + '/img/win.jpg');
+});
+app.get('/lose', function (req, res) {
+    res.sendFile(__dirname + '/img/lose.jpg');
+});
+app.get('/right', function (req, res) {
+    res.sendFile(__dirname + '/img/right.gif');
+});
 app.get('/paper', function (req, res) {
     res.sendFile(__dirname + '/img/paper.gif');
 });
@@ -43,6 +61,19 @@ app.get('/multiplayer.html', function (req, res) {
 app.get('/history.html', function (req, res) {
     res.sendFile(__dirname + '/history.html');
 });
+app.get('/page', function (req, res) {
+    res.sendFile(__dirname + '/page.js');
+});
+app.get('/htmlwrite', function (req, res) {
+    res.sendFile(__dirname + '/htmlwrite.js');
+});
+app.get('/jquery', function (req, res) {
+    res.sendFile(__dirname + '/jquery-1.11.1.js');
+});
+app.get('/io', function (req, res) {
+    res.sendFile(__dirname + '/io.js');
+});
+
 
 storage = []
 io.on( 'connection', function( socket ) {
@@ -115,8 +146,8 @@ function checkResults()
             io.to( storage[1][0] ).emit( 'output', 'Draw' );
         }
         else {
-        io.to( winner ).emit( 'output', 'You Won' );
-        io.to( loser ).emit( 'output', 'You Lose (noob)' );
+        io.to( winner ).emit( 'output', 'win' );
+        io.to( loser ).emit( 'output', 'lose' );
 
     }
     return true;
