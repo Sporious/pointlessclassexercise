@@ -25,13 +25,15 @@ app.get("/", function(req, res) {
 }), app.get("/win", function(req, res) {
     res.sendFile(__dirname + "/img/win.jpg");
 }), app.get("/lose", function(req, res) {
-    res.sendFile(__dirname + "/img/lose.jpg");
+    res.sendFile(__dirname + "/img/lose.png");
 }), app.get("/right", function(req, res) {
     res.sendFile(__dirname + "/img/right.gif");
 }), app.get("/paper", function(req, res) {
     res.sendFile(__dirname + "/img/paper.gif");
 }), app.get("/scissors", function(req, res) {
     res.sendFile(__dirname + "/img/scissors.gif");
+}), app.get("/Draw", function(req, res) {
+    res.sendFile(__dirname + "/img/draw.png");
 }), app.get("/css", function(req, res) {
     res.sendFile(__dirname + "/css/css.css");
 }), app.get("/jquery", function(req, res) {
