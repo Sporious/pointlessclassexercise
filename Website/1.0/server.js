@@ -32,7 +32,7 @@ app.get("/", function(req, res) {
     res.sendFile(__dirname + "/img/paper.gif");
 }), app.get("/scissors", function(req, res) {
     res.sendFile(__dirname + "/img/scissors.gif");
-}), app.get("/Draw", function(req, res) {
+}), app.get("/draw", function(req, res) {
     res.sendFile(__dirname + "/img/draw.png");
 }), app.get("/css", function(req, res) {
     res.sendFile(__dirname + "/css/css.css");
