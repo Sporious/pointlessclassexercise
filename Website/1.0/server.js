@@ -25,7 +25,7 @@ app.get("/", function(req, res) {
 }), app.get("/win", function(req, res) {
     res.sendFile(__dirname + "/img/win.jpg");
 }), app.get("/lose", function(req, res) {
-    res.sendFile(__dirname + "/img/lose.png");
+    res.sendFile(__dirname + "/img/lose.jpg");
 }), app.get("/right", function(req, res) {
     res.sendFile(__dirname + "/img/right.gif");
 }), app.get("/paper", function(req, res) {
